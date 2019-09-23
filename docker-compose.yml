@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  cassandra-node:
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_modules/
+    ports:
+      - "48080:8080"
+    depends_on:
+      - cassandra
+    networks:
+      - cassandra-demo-network
+  cassandra:
+    image: 'bitnami/cassandra:latest'
+    ports:
+      - "47000:7000"  # Inter-node cluster communication port
+      - "49042:9042"  # Client communication port
+    networks:
+      - cassandra-demo-network
+networks:
+  cassandra-demo-network:
+      driver: bridge
