@@ -12,3 +12,9 @@ compose:
 
 stats:
 	docker stats
+
+exec:
+	docker exec -it <container-id> /bin/sh
+
+compose-dev:
+	docker-compose -f docker-compose.dev.yml up --build

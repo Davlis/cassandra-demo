@@ -1,22 +1,21 @@
 const express = require('express')
-const database = require('./common/database/client')
+const dbClient = require('./common/database/client')
 
 const PORT = 8080
 
 const application = express()
 
-application.get('/', (_request, response, next) => {
+application.get('/', async (_request, response, next) => {
   console.log(`Request: processing`)
 
   const assertValue = 'system.local'
 
-  database.get(assertValue, (error,result) => {
-    if (error) {
-      return next(error);
-    }
-
-    return response.send({ result: process.pid, db :result })
-  });
+  try {
+    const result = await dbClient.get(assertValue)
+    response.send({ result: process.pid, db: result })
+  } catch (error) {
+    next(error)
+  }
 })
 
 application.listen(PORT, () => {
